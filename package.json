@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "start:dev": "PORT=3005 nodemon ./bin/www",
-    "start": "node ./bin/www",
+    "start": "pm2-runtime pm2.config.js",
     "build": "cd frontend; yarn; yarn build"
   },
   "dependencies": {
+    "amqplib": "^0.5.5",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
@@ -16,6 +17,7 @@
     "morgan": "~1.9.1",
     "node-netstat": "^1.8.0",
     "nslookup": "^1.1.1",
+    "pm2": "^3.5.1",
     "telnet-client": "^1.0.5"
   }
 }
