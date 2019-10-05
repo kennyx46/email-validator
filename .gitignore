@@ -1,3 +1,4 @@
 node_modules
 
-email-validator-frontend/
+frontend/node_modules
+frontend/build

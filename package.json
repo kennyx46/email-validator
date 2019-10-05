@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start:dev": "PORT=3005 nodemon ./bin/www",
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "build": "cd frontend; yarn build"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
