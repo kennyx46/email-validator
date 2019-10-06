@@ -1,0 +1,7 @@
+const { database, username, password, host, port, url } = require('./common/config').postgres;
+
+module.exports = {
+  url: url || `postgres://${username}:${password}@${host}:${port}/${database}`,
+  migrationsPath: 'migrations',
+  modelsPath: 'models'
+};
