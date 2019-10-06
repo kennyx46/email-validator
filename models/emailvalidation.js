@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const EmailValidation = sequelize.define('EmailValidation', {
     email: DataTypes.STRING,
     isValid: DataTypes.BOOLEAN,
-    confidence: DataTypes.INTEGER,
+    confidence: DataTypes.FLOAT,
     jobId: DataTypes.STRING,
     isProcessed: DataTypes.BOOLEAN
   }, {});

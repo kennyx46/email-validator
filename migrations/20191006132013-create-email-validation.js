@@ -18,7 +18,7 @@ module.exports = {
         defaultValue: false,
       },
       confidence: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         defaultValue: 0,
       },
       jobId: {
