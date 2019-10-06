@@ -5,8 +5,8 @@ module.exports = [
 		exec_mode: 'cluster',
 		instances: 2
 	},
-	// {
-	// 	script: './workers/emailWorker.js',
-	// 	name: 'worker'
-	// }
+	{
+		script: './workers/emailWorker.js',
+		name: 'worker'
+	}
 ];

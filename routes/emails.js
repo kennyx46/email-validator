@@ -73,9 +73,23 @@ router.post('/validate-email-async', async (req, res) => {
 router.get('/validate-email', async (req, res) => {
 	const { email } = req.query;
 
-	const validationResults = await EmailValidationService.checkEmailValidity(email);
+	const emailEntry = await EmailValidation.findOne({ where: { email }});
 
-  	res.json(validationResults);
+	if (!emailEntry) {
+		res.json({ error: true, reason: 'No such email' });
+		return;
+	}
+
+	const validateEmailResponseDto = {
+		email: emailEntry.email,
+		isValid: emailEntry.isValid,
+		confidence: emailEntry.confidence,
+		isProcessed: emailEntry.isProcessed,
+	};
+
+	res.json(validateEmailResponseDto);
+
+
 });
 
 module.exports = router;
