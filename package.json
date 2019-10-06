@@ -6,7 +6,7 @@
     "start:dev": "PORT=3005 nodemon ./bin/www",
     "start": "pm2-runtime pm2.config.js",
     "build": "cd frontend; yarn; yarn build",
-    "heroku-postbuild": "sequelize db:migrate"
+    "postinstall": "sequelize db:migrate"
   },
   "dependencies": {
     "amqplib": "^0.5.5",
