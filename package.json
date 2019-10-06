@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start:dev": "PORT=3005 nodemon ./bin/www",
-    "start": "pm2-runtime pm2.config.js",
+    "start": "pm2-runtime start pm2.config.js --env production",
     "build": "cd frontend; yarn; yarn build",
     "postinstall": "pm2 install pm2-logrotate; sequelize db:migrate"
   },
