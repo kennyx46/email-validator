@@ -6,7 +6,7 @@
     "start:dev": "PORT=3005 nodemon ./bin/www",
     "start": "pm2-runtime pm2.config.js",
     "build": "cd frontend; yarn; yarn build",
-    "postinstall": "sequelize db:migrate"
+    "postinstall": "pm2 install pm2-logrotate; sequelize db:migrate"
   },
   "dependencies": {
     "amqplib": "^0.5.5",
