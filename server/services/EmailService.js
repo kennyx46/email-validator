@@ -27,7 +27,7 @@ const validateEmailAsync = async (email) => {
 	return emailValidation;
 }
 
-const validateEmail = async (email, options) => {
+const validateEmail = async (email, options = {}) => {
 	const validationResults = await EmailValidationService.checkEmailValidity(email);
 
 	if (options.shouldSave) {

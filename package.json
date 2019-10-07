@@ -6,7 +6,8 @@
     "start:dev": "PORT=3005 nodemon ./server/bin/www",
     "start": "pm2-runtime start pm2.config.js --env production",
     "build": "cd frontend; yarn; yarn build",
-    "postinstall": "pm2 install pm2-logrotate; sequelize db:migrate"
+    "postinstall": "pm2 install pm2-logrotate; sequelize db:migrate",
+    "test": "jest server/test --watch"
   },
   "dependencies": {
     "amqplib": "^0.5.5",
@@ -15,6 +16,7 @@
     "dotenv": "^8.1.0",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "jest": "^24.9.0",
     "morgan": "~1.9.1",
     "node-netstat": "^1.8.0",
     "nslookup": "^1.1.1",
