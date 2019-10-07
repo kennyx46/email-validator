@@ -4,6 +4,11 @@ const EmailService = require('../services/EmailService');
 const validateEmailSync = async (req, res) => {
 	const { email } = req.body;
 
+	if (!email) {
+		res.status(422).json({ "error": "no email to validate" });
+		return;
+	}
+
 	const validationResults = await EmailService.validateEmail(email, { shouldSave: false });
 
   	res.json(validationResults);
@@ -12,6 +17,11 @@ const validateEmailSync = async (req, res) => {
 const validateEmailAsync = async (req, res) => {
 	const { email } = req.body;
 
+	if (!email) {
+		res.status(422).json({ "error": "no email to validate" });
+		return;
+	}
+
 	const emailEntry = await EmailService.validateEmailAsync(email);
 
   	res.json({ inProgress: true, jobId: emailEntry.jobId });
@@ -19,6 +29,11 @@ const validateEmailAsync = async (req, res) => {
 
 const validateEmail = async (req, res) => {
 	const { email } = req.query;
+
+	if (!email) {
+		res.status(422).json({ "error": "no email param" });
+		return;
+	}
 
 	const emailEntry = await EmailService.findEmail(email);
 

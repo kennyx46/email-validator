@@ -8,6 +8,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
 import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Badge from 'react-bootstrap/Badge';
 
 import api from './services/api';
 
@@ -30,31 +31,10 @@ class App extends Component {
     }
 
     setEmailValue = (e) => {
-        // e.preventDefault();
         this.setState({
             validationResult: null,
             email: e.target.value,
         });
-    }
-
-    getStepStyle = (stepNumber) => {
-        const { validationResult } = this.state;
-
-        if (!validationResult) return 'light';
-
-        const { confidence } = this.state.validationResult;
-
-        switch(stepNumber) {
-            case 1:
-                return confidence === 1 ? 'danger' : 'success';
-            case 2:
-                return confidence >= 0.66 ? 'danger' : 'success';
-            case 3:
-                return confidence >= 0.33 ? 'danger' : 'success';
-            default:
-                return 'light';
-        }
-
     }
 
     render() {
@@ -86,11 +66,19 @@ class App extends Component {
                                 :
                                 <Alert variant="danger">The email is not valid</Alert>
                             )}
+
+                            {validationResult && validationResult.confidence &&
+                                (<Button variant="secondary" disabled>
+                                  Confidence <Badge variant="light">{`${validationResult.confidence * 100}%`}</Badge>
+                                </Button>)
+                            }
+
                         </div>
+                        <h2>Verification steps:</h2>
                         <ListGroup >
-                            <ListGroup.Item variant={this.getStepStyle(1)}>1. Format check</ListGroup.Item>
-                            <ListGroup.Item variant={this.getStepStyle(2)}>2. Domain check</ListGroup.Item>
-                            <ListGroup.Item variant={this.getStepStyle(3)}>3. SMTP check</ListGroup.Item>
+                            <ListGroup.Item>1. Format check</ListGroup.Item>
+                            <ListGroup.Item>2. Domain check</ListGroup.Item>
+                            <ListGroup.Item>3. SMTP check</ListGroup.Item>
                         </ListGroup>
                     </Col>
                 </Row>

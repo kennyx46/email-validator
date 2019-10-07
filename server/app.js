@@ -3,6 +3,14 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const rateLimit = require("express-rate-limit");
+
+const rateLimiter = rateLimit({
+	windowMs: 1000 * 60,
+	max: 1,
+	delayMs: 0,
+	skipFailedRequests: true,
+});
 
 const routes = require('./routes');
 
@@ -14,8 +22,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
-app.post('/api/validate-email', routes.emails.validateEmailSync);
-app.post('/api/validate-email-async', routes.emails.validateEmailAsync);
+app.post('/api/validate-email', rateLimiter, routes.emails.validateEmailSync);
+app.post('/api/validate-email-async', rateLimiter, routes.emails.validateEmailAsync);
 app.get('/api/validate-email', routes.emails.validateEmail);
 app.get('/', routes.root);
 
