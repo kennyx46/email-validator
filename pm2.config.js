@@ -1,12 +1,12 @@
 module.exports = [
 	{
-		script: './bin/www',
+		script: './server/bin/www',
 		name: 'app',
 		exec_mode: 'cluster',
 		instances: 2
 	},
 	{
-		script: './workers/emailWorker.js',
+		script: './server/workers/emailWorker.js',
 		name: 'worker'
 	}
 ];

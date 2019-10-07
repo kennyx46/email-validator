@@ -12,7 +12,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
 app.post('/api/validate-email', routes.emails.validateEmailSync);
 app.post('/api/validate-email-async', routes.emails.validateEmailAsync);

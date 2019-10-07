@@ -1,9 +1,9 @@
 require('dotenv').config();
 
-const { database, username, password, host, port, url } = require('./common/config').postgres;
+const { database, username, password, host, port, url } = require('./server/common/config').postgres;
 
 module.exports = {
   url: url || `postgres://${username}:${password}@${host}:${port}/${database}`,
-  migrationsPath: 'migrations',
-  modelsPath: 'models'
+  migrationsPath: 'server/migrations',
+  modelsPath: 'server/models'
 };
