@@ -1,5 +1,4 @@
 import React, { Component, } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -8,13 +7,9 @@ import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
 import Container from 'react-bootstrap/Container';
+import ListGroup from 'react-bootstrap/ListGroup';
 
-
-const delay = (millis) => {
-    return new Promise((resolve, reject) => {
-        setTimeout(resolve, millis);
-    });
-}
+import api from './services/api';
 
 class App extends Component {
 
@@ -24,52 +19,12 @@ class App extends Component {
         validationResult: null,
     }
 
-    validateEmail = async (e) => {
-        // e.preventDefault();
-        this.setState({ isLoading: true, validationResult: null });
-        try {
-            const res = await fetch('/api/validate-email', {
-                method: 'POST',
-                body: JSON.stringify({email: this.state.email }),
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            const json = await res.json();
-            this.setState({ isLoading: false, validationResult: json });
-            console.log(json);
-        } catch(e) {
-            console.log('error validating email');
-            this.setState({ isLoading: false, error: true });
-        }
-    }
-
     validateEmailAsync = async () => {
         this.setState({ isLoading: true, validationResult: null });
         try {
-            await fetch('/api/validate-email-async', {
-                method: 'POST',
-                body: JSON.stringify({email: this.state.email }),
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            // const json = await res.json();
-
-            let isProcessed = false;
-            let json;
-            while (!isProcessed) {
-                await delay(1000);
-                const res = await fetch(`/api/validate-email?email=${this.state.email}`);
-                json = await res.json();
-                isProcessed = json.isProcessed;
-            }
-            this.setState({ isLoading: false, validationResult: json });
-            console.log(json);
+            const validationResult = await api.validateEmailAsync(this.state.email);
+            this.setState({ isLoading: false, validationResult });
         } catch(e) {
-            console.log('error validating email');
             this.setState({ isLoading: false, error: true });
         }
     }
@@ -82,38 +37,49 @@ class App extends Component {
         });
     }
 
+    getStepStyle = (stepNumber) => {
+        const { validationResult } = this.state;
+
+        if (!validationResult) return 'light';
+
+        const { confidence } = this.state.validationResult;
+
+        switch(stepNumber) {
+            case 1:
+                return confidence === 1 ? 'danger' : 'success';
+            case 2:
+                return confidence >= 0.66 ? 'danger' : 'success';
+            case 3:
+                return confidence >= 0.33 ? 'danger' : 'success';
+            default:
+                return 'light';
+        }
+
+    }
+
     render() {
         const { email, isLoading, validationResult } = this.state;
 
         return (
-            <Container style={{backgroundColor: 'white', borderRadius: '10px', padding: '50px'}}>
+            <Container className="appContainer">
                 <Row>
                     <Col xs={12} md={12} lg={12} >
-                {/* <img src={logo} className="App-logo" alt="logo" /> */}
-                {/* <p> */}
-                {/*   Edit <code>src/App.js</code> and save to reload. */}
-                {/* </p> */}
-                {/* <a */}
-                {/*   className="App-link" */}
-                {/*   href="https://reactjs.org" */}
-                {/*   target="_blank" */}
-                {/*   rel="noopener noreferrer" */}
-                {/* > */}
-                {/*   Learn React */}
-                {/* </a> */}
-                {/* {isLoading ? <p>Loading...</p> : <p> </p>} */}
-                {/* <div className="formWrapper"> */}
                         <h1 className="mb-4">Email checker</h1>
                         <Form>
                             <Form.Group controlId="email">
                                <Form.Label>Email address</Form.Label>
-                               <Form.Control value={email} size="lg" onKeyPress={e => {e.key === 'Enter' && e.preventDefault()}} onChange={this.setEmailValue} type="email" placeholder="test@test.com" />
+                               <Form.Control value={email} size="lg"
+                                    onKeyPress={e => {e.key === 'Enter' && e.preventDefault()}}
+                                    onChange={this.setEmailValue} type="email" placeholder="test@test.com" />
                             </Form.Group>
-                            <Button variant="primary" size="lg" block disabled={isLoading} onClick={this.validateEmailAsync}>Check email</Button>
+                            <Button variant="primary" size="lg" block disabled={isLoading} onClick={this.validateEmailAsync}>
+                                Check email
+                            </Button>
                         </Form>
 
                         <div className="feedbackWrapper">
-                            { isLoading && <Spinner style={{textAlign: 'center'}} animation="border" variant="primary" size="lg"/> }
+                            { isLoading && <Spinner className="text-center" animation="border" variant="primary" size="lg"/> }
+
 
                             {validationResult && (validationResult.isValid ?
                                 <Alert variant="success">Email is valid</Alert>
@@ -121,7 +87,11 @@ class App extends Component {
                                 <Alert variant="danger">The email is not valid</Alert>
                             )}
                         </div>
-                {/* </div> */}
+                        <ListGroup >
+                            <ListGroup.Item variant={this.getStepStyle(1)}>1. Format check</ListGroup.Item>
+                            <ListGroup.Item variant={this.getStepStyle(2)}>2. Domain check</ListGroup.Item>
+                            <ListGroup.Item variant={this.getStepStyle(3)}>3. SMTP check</ListGroup.Item>
+                        </ListGroup>
                     </Col>
                 </Row>
             </Container>

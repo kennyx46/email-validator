@@ -77,16 +77,17 @@ const checkEmailValidity = async (email) => {
         if (rcptToResponse.startsWith(SUCCESS_STATUS)) {
             return {
                 isValid: true,
+                confidence: 0,
             }
         } else if (rcptToResponse.startsWith(USER_DOES_NOT_EXIST_STATUS)) {
             return {
                 isValid: false,
-                // confidence?
+                confidence: 0.33
             }
         } else if (rcptToResponse.startsWith('5')) {
             return {
                 isValid: false,
-                // confidence?
+                confidence: 0.33,
             }
         }
 
@@ -97,6 +98,7 @@ const checkEmailValidity = async (email) => {
 
         return {
             isValid: true,
+            confidence: 0,
         };
 
     } catch(error) {
