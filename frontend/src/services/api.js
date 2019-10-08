@@ -23,12 +23,21 @@ const validateEmailAsync = async (email) => {
         headers: { 'Content-Type': 'application/json', }
     });
 
+    let timeoutExpired = false;
+    delay(120 * 1000).then(() => timeoutExpired = true);
+
     let isProcessed = false;
     let validationResult;
     while (!isProcessed) {
+        if (timeoutExpired) {
+            throw new Error('Polling timeout expired');
+        }
         await delay(1000);
         const res = await fetch(`/api/validate-email?email=${email}`);
         validationResult = await res.json();
+        if (validationResult.error) {
+            throw new Error('Error checking email, please try again later');
+        }
         isProcessed = validationResult.isProcessed;
     }
     return validationResult;

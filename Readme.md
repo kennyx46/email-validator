@@ -37,6 +37,7 @@ The service can be used either with the accompanying UI or as an API.
 * Improve logging and add statsd client
 * Add Swagger documentation
 * Improve error handling
+* Add attempts logic
 
 ## API
 ##### POST /validate-email

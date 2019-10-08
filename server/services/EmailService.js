@@ -1,11 +1,16 @@
 const EmailValidation = require('../models').EmailValidation;
 const EmailValidationService = require('./EmailValidationService');
 const queue = require('../common/queue');
+const logger = require('../common/logger');
 
 const ONE_HOUR = 60 * 60 * 1000;
 
 const findEmail = (email) => {
 	return EmailValidation.findOne({ where: { email }});
+};
+
+const deleteEmail = (email) => {
+	return EmailValidation.destroy({ where: { email }});
 };
 
 const validateEmailAsync = async (email) => {
@@ -17,7 +22,7 @@ const validateEmailAsync = async (email) => {
 	let correlationId = emailValidation.jobId;
 
 	if (created || (new Date() - emailValidation.updatedAt) > ONE_HOUR) {
-		console.log('creating job!');
+		logger.info('Creating job', { jobId: correlationId });
 		correlationId = parseInt(Math.random() * 1000).toString();
 		const resp = await queue.sendMessage({ email }, { correlationId });
 
@@ -25,7 +30,7 @@ const validateEmailAsync = async (email) => {
 	}
 
 	return emailValidation;
-}
+};
 
 const validateEmail = async (email, options = {}) => {
 	const validationResults = await EmailValidationService.checkEmailValidity(email);
@@ -41,10 +46,11 @@ const validateEmail = async (email, options = {}) => {
 	}
 
 	return validationResults;
-}
+};
 
 module.exports = {
 	findEmail,
+	deleteEmail,
 	validateEmailAsync,
 	validateEmail,
 };

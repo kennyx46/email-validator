@@ -18,10 +18,11 @@ class App extends Component {
         isLoading: false,
         email: '',
         validationResult: null,
+        error: null,
     }
 
     validateEmailAsync = async () => {
-        this.setState({ isLoading: true, validationResult: null });
+        this.setState({ isLoading: true, validationResult: null, error: null });
         try {
             const validationResult = await api.validateEmailAsync(this.state.email);
             this.setState({ isLoading: false, validationResult });
@@ -33,12 +34,13 @@ class App extends Component {
     setEmailValue = (e) => {
         this.setState({
             validationResult: null,
+            error: null,
             email: e.target.value,
         });
     }
 
     render() {
-        const { email, isLoading, validationResult } = this.state;
+        const { email, isLoading, validationResult, error } = this.state;
 
         return (
             <Container className="appContainer">
@@ -52,7 +54,7 @@ class App extends Component {
                                     onKeyPress={e => {e.key === 'Enter' && e.preventDefault()}}
                                     onChange={this.setEmailValue} type="email" placeholder="test@test.com" />
                             </Form.Group>
-                            <Button variant="primary" size="lg" block disabled={isLoading} onClick={this.validateEmailAsync}>
+                            <Button variant="primary" size="lg" block disabled={email.length === 0 || isLoading} onClick={this.validateEmailAsync}>
                                 Check email
                             </Button>
                         </Form>
@@ -60,6 +62,9 @@ class App extends Component {
                         <div className="feedbackWrapper">
                             { isLoading && <Spinner className="text-center" animation="border" variant="primary" size="lg"/> }
 
+                            { error &&
+                                <Alert variant="danger">Error checking email, please try again later</Alert>
+                            }
 
                             {validationResult && (validationResult.isValid ?
                                 <Alert variant="success">Email is valid</Alert>
