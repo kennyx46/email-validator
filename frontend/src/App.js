@@ -18,23 +18,23 @@ class App extends Component {
         isLoading: false,
         email: '',
         validationResult: null,
-        error: null,
+        error: '',
     }
 
     validateEmailAsync = async () => {
-        this.setState({ isLoading: true, validationResult: null, error: null });
+        this.setState({ isLoading: true, validationResult: null, error: '' });
         try {
             const validationResult = await api.validateEmailAsync(this.state.email);
             this.setState({ isLoading: false, validationResult });
-        } catch(e) {
-            this.setState({ isLoading: false, error: true });
+        } catch(error) {
+            this.setState({ isLoading: false, error: error.message || 'Error checking email, please try again later' });
         }
     }
 
     setEmailValue = (e) => {
         this.setState({
             validationResult: null,
-            error: null,
+            error: '',
             email: e.target.value,
         });
     }
@@ -62,8 +62,10 @@ class App extends Component {
                         <div className="feedbackWrapper">
                             { isLoading && <Spinner className="text-center" animation="border" variant="primary" size="lg"/> }
 
+                            { !isLoading && <p>Please enter email in the field and press `check email` button</p> }
+
                             { error &&
-                                <Alert variant="danger">Error checking email, please try again later</Alert>
+                                <Alert variant="danger">{error}</Alert>
                             }
 
                             {validationResult && (validationResult.isValid ?

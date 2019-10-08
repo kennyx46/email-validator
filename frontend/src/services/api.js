@@ -17,11 +17,15 @@ const validateEmail = async (email) => {
 }
 
 const validateEmailAsync = async (email) => {
-    await fetch('/api/validate-email-async', {
+    const validateEmailResponse = await fetch('/api/validate-email-async', {
         method: 'POST',
         body: JSON.stringify({ email }),
         headers: { 'Content-Type': 'application/json', }
     });
+
+    if (validateEmailResponse.status === 429) {
+        throw new Error(validateEmailResponse.statusText);
+    }
 
     let timeoutExpired = false;
     delay(120 * 1000).then(() => timeoutExpired = true);
