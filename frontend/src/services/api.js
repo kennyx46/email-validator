@@ -38,6 +38,9 @@ const validateEmailAsync = async (email) => {
         }
         await delay(1000);
         const res = await fetch(`/api/validation/email?email=${email}`);
+        if (res.status === 503) {
+            throw new Error(res.statusText);
+        }
         validationResult = await res.json();
         if (validationResult.error) {
             throw new Error('Error checking email, please try again later');
