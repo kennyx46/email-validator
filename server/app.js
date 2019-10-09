@@ -22,9 +22,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
-app.post('/api/validate-email', rateLimiter, routes.emails.validateEmailSync);
-app.post('/api/validate-email-async', rateLimiter, routes.emails.validateEmailAsync);
-app.get('/api/validate-email', routes.emails.validateEmail);
+app.post('/api/validation/email', rateLimiter, routes.emails.validateEmailSync);
+app.post('/api/validation/email-async', rateLimiter, routes.emails.validateEmailAsync);
+app.get('/api/validation/email', routes.emails.validateEmail);
 app.get('/', routes.root);
 
 // catch 404 and forward to error handler

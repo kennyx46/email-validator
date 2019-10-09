@@ -40,7 +40,7 @@ The service can be used either with the accompanying UI or as an API.
 * Add attempts logic
 
 ## API
-##### POST /validate-email
+##### POST /validation/email
 Request Body
 ```
 {
@@ -57,7 +57,7 @@ Response
 ```
 
 
-##### POST /validate-email-async
+##### POST /validation/email-async
 Request Body
 ```
 {
@@ -73,7 +73,7 @@ Response
 }
 ```
 
-##### GET /validate-email
+##### GET /validation/email
 Query params
 ```
 ?email=myemail@example.com

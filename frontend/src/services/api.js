@@ -5,7 +5,7 @@ const delay = (millis) => {
 }
 
 const validateEmail = async (email) => {
-    const response = await fetch('/api/validate-email', {
+    const response = await fetch('/api/validation/email', {
         method: 'POST',
         body: JSON.stringify({ email }),
         headers: { 'Content-Type': 'application/json', }
@@ -17,7 +17,7 @@ const validateEmail = async (email) => {
 }
 
 const validateEmailAsync = async (email) => {
-    const validateEmailResponse = await fetch('/api/validate-email-async', {
+    const validateEmailResponse = await fetch('/api/validation/email-async', {
         method: 'POST',
         body: JSON.stringify({ email }),
         headers: { 'Content-Type': 'application/json', }
@@ -37,7 +37,7 @@ const validateEmailAsync = async (email) => {
             throw new Error('Polling timeout expired');
         }
         await delay(1000);
-        const res = await fetch(`/api/validate-email?email=${email}`);
+        const res = await fetch(`/api/validation/email?email=${email}`);
         validationResult = await res.json();
         if (validationResult.error) {
             throw new Error('Error checking email, please try again later');
